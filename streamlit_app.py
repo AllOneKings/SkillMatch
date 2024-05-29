@@ -188,9 +188,6 @@ def run():
      # Check if the connection and cursor are valid
     if connection and cursor:
         try:
-            
-
-    
             st.title("SkillMatch Resume Analyzer App")
             st.sidebar.markdown("# Select User")
             activities = ["Applicant", "Admin", "Feedback", "About"]
@@ -252,8 +249,6 @@ def run():
                             );
                         """
             cursor.execute(table_sql)
-
-
             DBf_table_name = 'user_feedback'
             tablef_sql = "CREATE TABLE IF NOT EXISTS " + DBf_table_name + """
                             (ID INT NOT NULL AUTO_INCREMENT,
@@ -269,69 +264,81 @@ def run():
             
             if choice == 'Applicant':
                 # Collecting User Information
-                act_name = st.text_input('Name*')
-                act_mail = st.text_input('Mail*')
-                act_mob  = st.text_input('Mobile Number*')
-                city = st.text_input('City*')
-                state = st.text_input('State*')
-                country = st.text_input('Country*')
+                # Display the summary section by default
+                show_inputs = st.checkbox("Show Inputs")
                 
-                # Generate secure token
-                sec_token = secrets.token_urlsafe(12)
+                if show_inputs:
+                    # Collecting User Information
+                    act_name = st.text_input('Name*')
+                    act_mail = st.text_input('Mail*')
+                    act_mob  = st.text_input('Mobile Number*')
+                    city = st.text_input('City*')
+                    state = st.text_input('State*')
+                    country = st.text_input('Country*')
                 
-                # Collecting additional information
-                dev_user = st.text_input('Device User*')
+                    # Generate secure token
+                    sec_token = secrets.token_urlsafe(12)
                 
-                # OS and version selection
-                os_options = ['Select', 'Windows', 'macOS', 'Linux', 'Android', 'iOS']
-                os_name = st.selectbox('OS Name*', os_options)
+                    # Collecting additional information
+                    dev_user = st.text_input('Device User*')
                 
-                if os_name == 'Windows':
-                    os_version = st.selectbox('OS Version*', ['Select', '9/Older''10', '11'])
-                elif os_name == 'macOS':
-                    os_version = st.selectbox('OS Version*', ['Select', 'Big Sur', 'Monterey', 'Ventura'])
-                elif os_name == 'Linux':
-                    os_version = st.selectbox('OS Version*', ['Select', 'Ubuntu', 'Fedora', 'Arch', 'Debian'])
-                elif os_name == 'Android':
-                    os_version = st.selectbox('OS Version*', ['Select', '8/Older' '10', '11', '12'])
-                elif os_name == 'iOS':
-                    os_version = st.selectbox('OS Version*', ['Select', '14', '15', '16'])
+                    # OS and version selection
+                    os_options = ['Select', 'Windows', 'macOS', 'Linux', 'Android', 'iOS']
+                    os_name = st.selectbox('OS Name*', os_options)
+                
+                    if os_name == 'Windows':
+                        os_version = st.selectbox('OS Version*', ['Select', '7', '8', '10', '11'])
+                    elif os_name == 'macOS':
+                        os_version = st.selectbox('OS Version*', ['Select', 'Big Sur', 'Monterey', 'Ventura'])
+                    elif os_name == 'Linux':
+                        os_version = st.selectbox('OS Version*', ['Select', 'Ubuntu', 'Fedora', 'Arch', 'Debian'])
+                    elif os_name == 'Android':
+                        os_version = st.selectbox('OS Version*', ['Select', '8', '9', '10', '11', '12'])
+                    elif os_name == 'iOS':
+                        os_version = st.selectbox('OS Version*', ['Select', '14', '15', '16'])
+                    else:
+                        os_version = 'Select'
+                
+                    # Combine OS name and version
+                    os_name_ver = f"{os_name} {os_version}" if os_name != 'Select' and os_version != 'Select' else 'Select'
+                
+                    # Validate required fields
+                    required_fields_filled = all([
+                        act_name, act_mail, act_mob, 
+                        city, state, country, 
+                        dev_user, os_name_ver != 'Select Select'
+                    ])
+                    email_valid = validate_email(act_mail)
+                    mobile_valid = validate_mobile(act_mob)
+                
+                    # Provide feedback on invalid inputs
+                    if required_fields_filled:
+                        if not email_valid:
+                            st.error("Please enter a valid email address.")
+                        if not mobile_valid:
+                            st.warning("Please enter a valid mobile number.")
+                    else:
+                        st.warning("Please fill in all required fields (Name, Mail, Mobile Number, City, State, Country, Device User, OS Name and Version).")
+                
+                    # If all required fields are filled and valid, allow resume upload
+                    if required_fields_filled and email_valid and mobile_valid:
+                        st.success("All inputs are valid. You can proceed with resume upload.")
+                        # Upload Resume (you can add your resume upload logic here)
+                
+                    # Display collected information in an expander
+                    with st.expander("Filled Info"):
+                        st.write('### Collected Information')
+                        st.write(f'Name: {act_name}')
+                        st.write(f'Mail: {act_mail}')
+                        st.write(f'Mobile Number: {act_mob}')
+                        st.write(f'City: {city}')
+                        st.write(f'State: {state}')
+                        st.write(f'Country: {country}')
+                        st.write(f'Secure Token: {sec_token}')
+                        st.write(f'Device User: {dev_user}')
+                        st.write(f'OS Name and Version: {os_name_ver}')
                 else:
-                    os_version = 'Select'
-                
-                # Combine OS name and version
-                os_name_ver = f"{os_name} {os_version}" if os_name != 'Select' and os_version != 'Select' else 'Select'
-                
-                # Validate required fields
-                required_fields_filled = all([
-                    act_name, act_mail, act_mob, 
-                    city, state, country, 
-                    dev_user, os_name_ver != 'Select Select'
-                ])
-                email_valid = is_valid_email(act_mail)
-                mobile_valid = is_valid_mobile(act_mob)
-                
-                # Provide feedback on invalid inputs
-                if required_fields_filled:
-                    if not email_valid:
-                        st.error("Please enter a valid email address.")
-                    if not mobile_valid:
-                        st.warning("Please enter a valid mobile number.")
-                else:
-                    st.warning("Please fill in all required fields (Name, Mail, Mobile Number, City, State, Country, Device User, OS Name and Version).")
-
-                with st.expander("Provided Information"):
-                    # Display collected information
-                    st.write('### Collected Information')
-                    st.write(f'Name: {act_name}')
-                    st.write(f'Mail: {act_mail}')
-                    st.write(f'Mobile Number: {act_mob}')
-                    st.write(f'City: {city}')
-                    st.write(f'State: {state}')
-                    st.write(f'Country: {country}')
-                    st.write(f'Secure Token: {sec_token}')
-                    st.write(f'Device User: {dev_user}')
-                    st.write(f'OS Name and Version: {os_name_ver}')
+                    st.write("Click the checkbox above to enter your details.")
                 # If all required fields are filled and valid, allow resume upload
                 if required_fields_filled and email_valid and mobile_valid:
                     st.success("All inputs are valid. You can proceed with resume upload.")
