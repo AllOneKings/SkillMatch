@@ -287,15 +287,15 @@ def run():
                 os_name = st.selectbox('OS Name*', os_options)
                 
                 if os_name == 'Windows':
-                    os_version = st.selectbox('OS Version*', ['Select', 'Windows 10', 'Windows 11'])
+                    os_version = st.selectbox('OS Version*', ['Select', '9/Older''10', '11'])
                 elif os_name == 'macOS':
                     os_version = st.selectbox('OS Version*', ['Select', 'Big Sur', 'Monterey', 'Ventura'])
                 elif os_name == 'Linux':
                     os_version = st.selectbox('OS Version*', ['Select', 'Ubuntu', 'Fedora', 'Arch', 'Debian'])
                 elif os_name == 'Android':
-                    os_version = st.selectbox('OS Version*', ['Select', 'Android 10', 'Android 11', 'Android 12'])
+                    os_version = st.selectbox('OS Version*', ['Select', '8/Older' '10', '11', '12'])
                 elif os_name == 'iOS':
-                    os_version = st.selectbox('OS Version*', ['Select', 'iOS 14', 'iOS 15', 'iOS 16'])
+                    os_version = st.selectbox('OS Version*', ['Select', '14', '15', '16'])
                 else:
                     os_version = 'Select'
                 
@@ -320,17 +320,18 @@ def run():
                 else:
                     st.warning("Please fill in all required fields (Name, Mail, Mobile Number, City, State, Country, Device User, OS Name and Version).")
 
-                # Display collected information
-                st.write('### Collected Information')
-                st.write(f'Name: {act_name}')
-                st.write(f'Mail: {act_mail}')
-                st.write(f'Mobile Number: {act_mob}')
-                st.write(f'City: {city}')
-                st.write(f'State: {state}')
-                st.write(f'Country: {country}')
-                st.write(f'Secure Token: {sec_token}')
-                st.write(f'Device User: {dev_user}')
-                st.write(f'OS Name and Version: {os_name_ver}')
+                with st.expander("Provided Information"):
+                    # Display collected information
+                    st.write('### Collected Information')
+                    st.write(f'Name: {act_name}')
+                    st.write(f'Mail: {act_mail}')
+                    st.write(f'Mobile Number: {act_mob}')
+                    st.write(f'City: {city}')
+                    st.write(f'State: {state}')
+                    st.write(f'Country: {country}')
+                    st.write(f'Secure Token: {sec_token}')
+                    st.write(f'Device User: {dev_user}')
+                    st.write(f'OS Name and Version: {os_name_ver}')
                 # If all required fields are filled and valid, allow resume upload
                 if required_fields_filled and email_valid and mobile_valid:
                     st.success("All inputs are valid. You can proceed with resume upload.")
