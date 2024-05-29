@@ -264,7 +264,6 @@ def run():
             
             if choice == 'Applicant':
                 # Collecting User Information
-                # Collecting User Information
                 st.subheader("User Information")
                 col1, col2 = st.columns(2)
                 with col1:
@@ -277,8 +276,6 @@ def run():
                     country = st.text_input('Country*')
                 
                 st.subheader("Additional Information")
-                # Generate secure token
-                sec_token = secrets.token_urlsafe(12)
                 # Collecting additional information
                 dev_user = st.text_input('Device User* eg. raphaell')
                 
@@ -322,27 +319,19 @@ def run():
                 else:
                     st.warning("Please fill in all required fields (Name, Mail, Mobile Number, City, State, Country, Device User, OS Name and Version).")
                 
-                # If all required fields are filled and valid, allow resume upload
-                if required_fields_filled and email_valid and mobile_valid:
-                    st.success("All inputs are valid. You can proceed with resume upload.")
-                    if required_fields_filled and email_valid and mobile_valid:
-                        st.success("All inputs are valid. You can proceed with resume upload.")
-                        # Upload Resume (you can add your resume upload logic here)
-                
-                    # Display collected information in an expander
-                    with st.expander("Filled Info"):
-                        st.write('### Collected Information')
-                        st.write(f'Name: {act_name}')
-                        st.write(f'Mail: {act_mail}')
-                        st.write(f'Mobile Number: {act_mob}')
-                        st.write(f'City: {city}')
-                        st.write(f'State: {state}')
-                        st.write(f'Country: {country}')
-                        st.write(f'Secure Token: {sec_token}')
-                        st.write(f'Device User: {dev_user}')
-                        st.write(f'OS Name and Version: {os_name_ver}')
-                else:
-                    st.write("Click the checkbox above to enter your details.")
+                # Display collected information in an expander
+                with st.expander("Filled Info"):
+                    st.write('### Collected Information')
+                    st.write(f'Name: {act_name}')
+                    st.write(f'Mail: {act_mail}')
+                    st.write(f'Mobile Number: {act_mob}')
+                    st.write(f'City: {city}')
+                    st.write(f'State: {state}')
+                    st.write(f'Country: {country}')
+                    st.write(f'Secure Token: {secrets.token_urlsafe(12)}')
+                    st.write(f'Device User: {dev_user}')
+                    st.write(f'OS Name and Version: {os_name_ver}')
+
                 # If all required fields are filled and valid, allow resume upload
                 if required_fields_filled and email_valid and mobile_valid:
                     st.success("All inputs are valid. You can proceed with resume upload.")
