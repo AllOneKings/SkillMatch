@@ -272,7 +272,10 @@ def run():
                 act_name = st.text_input('Name*')
                 act_mail = st.text_input('Mail*')
                 act_mob  = st.text_input('Mobile Number*')
-                
+                st.write('### Collected Information')
+                st.write(f'Name: {act_name}')
+                st.write(f'Mail: {act_mail}')
+                st.write(f'Mobile Number: {act_mob}')
                 # Generate secure token
                 sec_token = secrets.token_urlsafe(12)
                 
