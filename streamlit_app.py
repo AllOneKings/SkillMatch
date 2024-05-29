@@ -34,8 +34,6 @@ import plotly.graph_objects as go
 from geopy.geocoders import Nominatim
 import re
 import logging
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
 
 
 st.set_page_config(
@@ -60,36 +58,6 @@ X_RapidAPI_Host = os.getenv("X_RapidAPI_Host")
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Retry mechanism for HTTP connections
-def requests_retry_session(retries=3, backoff_factor=0.5, status_forcelist=(500, 502, 504)):
-    session = requests.Session()
-    retry = Retry(
-        total=retries,
-        backoff_factor=backoff_factor,
-        status_forcelist=status_forcelist
-    )
-    adapter = HTTPAdapter(max_retries=retry)
-    session.mount('http://', adapter)
-    session.mount('https://', adapter)
-    return session
-
-# Function to fetch geolocation
-def fetch_geolocation(location):
-    url = f"https://nominatim.openstreetmap.org/search?q={location}&format=json&limit=1"
-    try:
-        with requests_retry_session() as session:
-            response = session.get(url)
-            if response.status_code == 200:
-                data = response.json()
-                if data:
-                    return data[0]
-                else:
-                    st.error("No location information found.")
-            else:
-                st.error(f"Failed to retrieve location information. Status Code: {response.status_code}")
-    except Exception as e:
-        st.error(f"An error occurred while fetching location information: {e}")
         
 # Function to validate email format
 def is_valid_email(email):
@@ -300,24 +268,84 @@ def run():
             cursor.execute(tablef_sql)
             
             if choice == 'Applicant':
-
                 # Collecting User Information
-                act_name = st.text_input('Nme*')
+                act_name = st.text_input('Name*')
                 act_mail = st.text_input('Mail*')
                 act_mob  = st.text_input('Mobile Number*')
                 
-                # Collecting Location Information
-                location = st.text_input('Location (e.g., City, State, Country)*')
+                # Generate secure token
+                sec_token = secrets.token_urlsafe(12)
                 
-                # Fetch geolocation
-                if location:
-                    geolocation = fetch_geolocation(location)
-                    if geolocation:
-                        st.success("Location information retrieved successfully.")
-                        st.write(geolocation)
+                # Get host name
+                host_name = socket.gethostname()
+                
+                # Get IP address
+                ip_add = socket.gethostbyname(host_name)
+                
+                # Get current user
+                dev_user = os.getlogin()
+                
+                # Get OS name and version
+                os_name_ver = platform.system() + " " + platform.release()
+                
+                # Function to fetch geolocation using HTML5 Geolocation
+                def get_html_geolocation():
+                    if st.get_logger().level <= 20:  # Check if logging level is not set to DEBUG
+                        st.markdown(
+                            """
+                            <script>
+                            navigator.geolocation.getCurrentPosition(function(position) {
+                                Shiny.setInputValue('latitude', position.coords.latitude);
+                                Shiny.setInputValue('longitude', position.coords.longitude);
+                            });
+                            </script>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+                
+                # HTML Geolocation
+                get_location_button = st.button("Get Location")
+                
+                if get_location_button:
+                    get_html_geolocation()
+                
+                latitude = st.empty()
+                longitude = st.empty()
+                
+                # Retrieve the latitude and longitude from the HTML geolocation
+                latitude_val = st.session_state.latitude if 'latitude' in st.session_state else None
+                longitude_val = st.session_state.longitude if 'longitude' in st.session_state else None
+                
+                # Variables for city, state, and country
+                city = ""
+                state = ""
+                country = ""
+                
+                # Fetch location based on latitude and longitude
+                if latitude_val is not None and longitude_val is not None:
+                    g = geocoder.osm([latitude_val, longitude_val], method='reverse')
+                    location = g.json
+                    if location:
+                        address = location['address']
+                        city = address.get('city', '')
+                        state = address.get('state', '')
+                        country = address.get('country', '')
                     else:
-                        st.warning("Unable to retrieve location information.")
-
+                        st.error("Unable to retrieve location information.")
+                
+                # Display collected information
+                st.write('### Collected Information')
+                st.write(f'Name: {act_name}')
+                st.write(f'Mail: {act_mail}')
+                st.write(f'Mobile Number: {act_mob}')
+                st.write(f'Secure Token: {sec_token}')
+                st.write(f'Host Name: {host_name}')
+                st.write(f'IP Address: {ip_add}')
+                st.write(f'Device User: {dev_user}')
+                st.write(f'OS Name and Version: {os_name_ver}')
+                st.write(f'City: {city}')
+                st.write(f'State: {state}')
+                st.write(f'Country: {country}')
                 # Flag to check if all required fields are filled
                 required_fields_filled = bool(act_name and act_mail and act_mob)
                 email_valid = is_valid_email(act_mail)
