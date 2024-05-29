@@ -319,12 +319,7 @@ def run():
                         st.warning("Please enter a valid mobile number.")
                 else:
                     st.warning("Please fill in all required fields (Name, Mail, Mobile Number, City, State, Country, Device User, OS Name and Version).")
-                
-                # If all required fields are filled and valid, allow resume upload
-                if required_fields_filled and email_valid and mobile_valid:
-                    st.success("All inputs are valid. You can proceed with resume upload.")
-                    # Upload Resume (you can add your resume upload logic here)
-                
+
                 # Display collected information
                 st.write('### Collected Information')
                 st.write(f'Name: {act_name}')
@@ -336,6 +331,9 @@ def run():
                 st.write(f'Secure Token: {sec_token}')
                 st.write(f'Device User: {dev_user}')
                 st.write(f'OS Name and Version: {os_name_ver}')
+                # If all required fields are filled and valid, allow resume upload
+                if required_fields_filled and email_valid and mobile_valid:
+                    st.success("All inputs are valid. You can proceed with resume upload.")
                     # Upload Resume
                     st.markdown('''<h5 style='text-align: left; color: #008080;'> Upload Your Resume, And Get Smart Recommendations</h5>''',unsafe_allow_html=True)
                     
