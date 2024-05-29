@@ -86,19 +86,12 @@ def geocode_with_retry(latlng, retries=3, delay=1):
     return location
         
 
-def fetch_yt_video(link):
+def fetch_yt_video_title(link):
     try:
-        response = requests.get(link)
-        if response.status_code == 200:
-            html_content = response.text
-            title_match = re.search(r'<title>(.*?) - YouTube</title>', html_content)
-            if title_match:
-                title = title_match.group(1)
-                return title
-            else:
-                return "Video Title Unavailable"
-        else:
-            return "Video Title Unavailable"
+        with yt_dlp.YoutubeDL({}) as ydl:
+            info = ydl.extract_info(video_url, download=False)
+            title = info.get('title', 'Video Title Unavailable')
+        return title
     except Exception as e:
         return f"Error: {e}"
 
