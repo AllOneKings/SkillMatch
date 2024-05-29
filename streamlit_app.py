@@ -274,8 +274,40 @@ def run():
                 act_mail = st.text_input('Mail*')
                 act_mob  = st.text_input('Mobile Number*')
 
+                # Prompt user to input their username
+                dev_user = st.text_input('Username*')
+
+                # Prompt user to input their operating system and version
+                os_name_ver = st.text_input('Operating System and Version*')
+
+                # Collect user's location information
+                user_location = st.text_input('Location (City, Country)*')
+
+                # Geocode user's location
+                geolocator = Nominatim(user_agent="geoapiExercises")
+                location = geolocator.geocode(user_location)
+
+                if location:
+                    address = location.address
+                    city = location.raw.get('city', '')
+                    state = location.raw.get('state', '')
+                    country = location.raw.get('country', '')
+                else:
+                    st.error("Unable to retrieve location information.")
+
+                # Generate secure token
+                sec_token = st.secrets.token_urlsafe(12)
+
+                # Display collected information
+                st.write("Name:", act_name)
+                st.write("Mail:", act_mail)
+                st.write("Mobile Number:", act_mob)
+                st.write("Username:", dev_user)
+                st.write("Operating System and Version:", os_name_ver)
+                st.write("City:", city)
+
                 # Flag to check if all required fields are filled
-                required_fields_filled = bool(act_name and act_mail and act_mob)
+                required_fields_filled = bool(act_name and act_mail and act_mob and dev_user and os_name_ver and city)
                 email_valid = is_valid_email(act_mail)
                 mobile_valid = is_valid_mobile(act_mob)
 
