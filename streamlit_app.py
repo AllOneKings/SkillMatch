@@ -23,7 +23,7 @@ from pymysql import OperationalError, MySQLError
 from Courses import ds_course, web_course, android_course, ios_course, uiux_course, resume_videos, interview_videos
 import pafy
 import plotly.express as px # to create visualisations at the admin session
-import yt_dlp as youtube_dl
+import yt_dlp
 import os
 from dotenv import load_dotenv
 import socket
@@ -85,9 +85,16 @@ def geocode_with_retry(latlng, retries=3, delay=1):
     
     return location
         
+
 def fetch_yt_video(link):
-    video = pafy.new(link)
-    return video.title
+    try:
+        with yt_dlp.YoutubeDL({}) as ydl:
+            info = ydl.extract_info(link, download=False)
+            title = info.get('title', 'Video Title Unavailable')
+        return title
+    except Exception as e:
+        return f"Error: {e}"
+
 
 def get_table_download_link(df, filename, text):
     """Generates a link allowing the data in a given panda dataframe to be downloaded
