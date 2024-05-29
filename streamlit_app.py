@@ -775,10 +775,7 @@ def run():
                             else:
                                 st.error("No data found in resume.")
                 else:
-                    if required_fields_filled:
-                        st.warning("Please correct the invalid fields above.")
-                    else:
-                        st.warning("Please fill in all required fields (Name, Mail, Mobile Number) before uploading your resume.")
+                    st.warning("Please fill in all required fields (Name, Mail, Mobile Number) before uploading your resume.")
             
             ###### CODE FOR FEEDBACK SIDE ######
             elif choice == 'Feedback':
