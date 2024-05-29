@@ -280,7 +280,7 @@ def run():
                 # Generate secure token
                 sec_token = secrets.token_urlsafe(12)
                 # Collecting additional information
-                dev_user = st.text_input('Device User*')
+                dev_user = st.text_input('Device User* eg. raphaell')
                 
                 st.subheader("OS Information")
                 # OS and version selection
