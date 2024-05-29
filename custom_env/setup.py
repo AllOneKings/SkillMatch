@@ -6,11 +6,9 @@ setup(
     packages=find_packages(),
     install_requires=[
         'pyresparser==1.0.6',
-        'youtube-dl==2021.12.17',
-        'yt-dlp==2023.12.30',
     ],
     package_data={
-        '': ['pyresparser/*', 'youtube_dl/*', 'yt_dlp/*'],
+        '': ['pyresparser/*'],
     },
     include_package_data=True,
 )
