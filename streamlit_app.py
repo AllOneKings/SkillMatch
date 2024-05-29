@@ -302,7 +302,7 @@ def run():
             if choice == 'Applicant':
 
                 # Collecting User Information
-                act_name = st.text_input('Name*')
+                act_name = st.text_input('Nme*')
                 act_mail = st.text_input('Mail*')
                 act_mob  = st.text_input('Mobile Number*')
                 
