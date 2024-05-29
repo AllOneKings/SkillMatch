@@ -88,13 +88,19 @@ def geocode_with_retry(latlng, retries=3, delay=1):
 
 def fetch_yt_video(link):
     try:
-        with yt_dlp.YoutubeDL({}) as ydl:
-            info = ydl.extract_info(link, download=False)
-            title = info.get('title', 'Video Title Unavailable')
-        return title
+        response = requests.get(link)
+        if response.status_code == 200:
+            html_content = response.text
+            title_match = re.search(r'<title>(.*?) - YouTube</title>', html_content)
+            if title_match:
+                title = title_match.group(1)
+                return title
+            else:
+                return "Video Title Unavailable"
+        else:
+            return "Video Title Unavailable"
     except Exception as e:
         return f"Error: {e}"
-
 
 def get_table_download_link(df, filename, text):
     """Generates a link allowing the data in a given panda dataframe to be downloaded
