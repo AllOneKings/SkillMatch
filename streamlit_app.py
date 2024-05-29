@@ -279,29 +279,38 @@ def run():
                 # Generate secure token
                 sec_token = secrets.token_urlsafe(12)
                 
-                # Get current user (You may need to find an alternative way to retrieve this information)
-                dev_user = ""
+                # Collecting additional information
+                dev_user = st.text_input('Device User*')
                 
-                # Get OS name and version (You may need to find an alternative way to retrieve this information)
-                os_name_ver = ""
+                # OS and version selection
+                os_options = ['Select', 'Windows', 'macOS', 'Linux', 'Android', 'iOS']
+                os_name = st.selectbox('OS Name*', os_options)
                 
-                # Display collected information
-                st.write('### Collected Information')
-                st.write(f'Name: {act_name}')
-                st.write(f'Mail: {act_mail}')
-                st.write(f'Mobile Number: {act_mob}')
-                st.write(f'Secure Token: {sec_token}')
-                st.write(f'City: {city}')
-                st.write(f'State: {state}')
-                st.write(f'Country: {country}')
-                st.write(f'Device User: {dev_user}')
-                st.write(f'OS Name and Version: {os_name_ver}')
-                # Flag to check if all required fields are filled
-                required_fields_filled = bool(act_name and act_mail and act_mob)
-                email_valid = is_valid_email(act_mail)
-                mobile_valid = is_valid_mobile(act_mob)
-
-
+                if os_name == 'Windows':
+                    os_version = st.selectbox('OS Version*', ['Select', 'Windows 10', 'Windows 11'])
+                elif os_name == 'macOS':
+                    os_version = st.selectbox('OS Version*', ['Select', 'Big Sur', 'Monterey', 'Ventura'])
+                elif os_name == 'Linux':
+                    os_version = st.selectbox('OS Version*', ['Select', 'Ubuntu', 'Fedora', 'Arch', 'Debian'])
+                elif os_name == 'Android':
+                    os_version = st.selectbox('OS Version*', ['Select', 'Android 10', 'Android 11', 'Android 12'])
+                elif os_name == 'iOS':
+                    os_version = st.selectbox('OS Version*', ['Select', 'iOS 14', 'iOS 15', 'iOS 16'])
+                else:
+                    os_version = 'Select'
+                
+                # Combine OS name and version
+                os_name_ver = f"{os_name} {os_version}" if os_name != 'Select' and os_version != 'Select' else 'Select'
+                
+                # Validate required fields
+                required_fields_filled = all([
+                    act_name, act_mail, act_mob, 
+                    city, state, country, 
+                    dev_user, os_name_ver != 'Select Select'
+                ])
+                email_valid = validate_email(act_mail)
+                mobile_valid = validate_mobile(act_mob)
+                
                 # Provide feedback on invalid inputs
                 if required_fields_filled:
                     if not email_valid:
@@ -309,10 +318,24 @@ def run():
                     if not mobile_valid:
                         st.warning("Please enter a valid mobile number.")
                 else:
-                    st.warning("Please fill in all required fields (Name, Mail, Mobile Number).")
-
+                    st.warning("Please fill in all required fields (Name, Mail, Mobile Number, City, State, Country, Device User, OS Name and Version).")
+                
                 # If all required fields are filled and valid, allow resume upload
                 if required_fields_filled and email_valid and mobile_valid:
+                    st.success("All inputs are valid. You can proceed with resume upload.")
+                    # Upload Resume (you can add your resume upload logic here)
+                
+                # Display collected information
+                st.write('### Collected Information')
+                st.write(f'Name: {act_name}')
+                st.write(f'Mail: {act_mail}')
+                st.write(f'Mobile Number: {act_mob}')
+                st.write(f'City: {city}')
+                st.write(f'State: {state}')
+                st.write(f'Country: {country}')
+                st.write(f'Secure Token: {sec_token}')
+                st.write(f'Device User: {dev_user}')
+                st.write(f'OS Name and Version: {os_name_ver}')
                     # Upload Resume
                     st.markdown('''<h5 style='text-align: left; color: #008080;'> Upload Your Resume, And Get Smart Recommendations</h5>''',unsafe_allow_html=True)
                     
