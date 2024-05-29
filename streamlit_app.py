@@ -34,6 +34,8 @@ import plotly.graph_objects as go
 from geopy.geocoders import Nominatim
 import re
 import logging
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 
 st.set_page_config(
@@ -59,6 +61,36 @@ X_RapidAPI_Host = os.getenv("X_RapidAPI_Host")
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Retry mechanism for HTTP connections
+def requests_retry_session(retries=3, backoff_factor=0.5, status_forcelist=(500, 502, 504)):
+    session = requests.Session()
+    retry = Retry(
+        total=retries,
+        backoff_factor=backoff_factor,
+        status_forcelist=status_forcelist
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    return session
+
+# Function to fetch geolocation
+def fetch_geolocation(location):
+    url = f"https://nominatim.openstreetmap.org/search?q={location}&format=json&limit=1"
+    try:
+        with requests_retry_session() as session:
+            response = session.get(url)
+            if response.status_code == 200:
+                data = response.json()
+                if data:
+                    return data[0]
+                else:
+                    st.error("No location information found.")
+            else:
+                st.error(f"Failed to retrieve location information. Status Code: {response.status_code}")
+    except Exception as e:
+        st.error(f"An error occurred while fetching location information: {e}")
+        
 # Function to validate email format
 def is_valid_email(email):
     return re.match(r"[^@]+@[^@]+\.[^@]+", email) is not None
@@ -269,45 +301,25 @@ def run():
             
             if choice == 'Applicant':
 
-                # Collecting Miscellaneous Information
+                # Collecting User Information
                 act_name = st.text_input('Name*')
                 act_mail = st.text_input('Mail*')
                 act_mob  = st.text_input('Mobile Number*')
-
-                # Prompt user to input their username
-                dev_user = st.text_input('Username*')
-
-                # Prompt user to input their operating system and version
-                os_name_ver = st.text_input('Operating System and Version*')
-
-                # Collect user's location information
-                user_location = st.text_input('Location (City, Country)*')
-
-                # Geocode user's location
-                geolocator = Nominatim(user_agent="geoapiExercises")
-                location = geolocator.geocode(user_location)
-
+                
+                # Collecting Location Information
+                location = st.text_input('Location (e.g., City, State, Country)*')
+                
+                # Fetch geolocation
                 if location:
-                    address = location.address
-                    city = location.raw.get('city', '')
-                    state = location.raw.get('state', '')
-                    country = location.raw.get('country', '')
-                else:
-                    st.error("Unable to retrieve location information.")
-
-                # Generate secure token
-                sec_token = st.secrets.token_urlsafe(12)
-
-                # Display collected information
-                st.write("Name:", act_name)
-                st.write("Mail:", act_mail)
-                st.write("Mobile Number:", act_mob)
-                st.write("Username:", dev_user)
-                st.write("Operating System and Version:", os_name_ver)
-                st.write("City:", city)
+                    geolocation = fetch_geolocation(location)
+                    if geolocation:
+                        st.success("Location information retrieved successfully.")
+                        st.write(geolocation)
+                    else:
+                        st.warning("Unable to retrieve location information.")
 
                 # Flag to check if all required fields are filled
-                required_fields_filled = bool(act_name and act_mail and act_mob and dev_user and os_name_ver and city)
+                required_fields_filled = bool(act_name and act_mail and act_mob)
                 email_valid = is_valid_email(act_mail)
                 mobile_valid = is_valid_mobile(act_mob)
 
