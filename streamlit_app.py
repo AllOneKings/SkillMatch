@@ -305,7 +305,7 @@ def run():
                 required_fields_filled = all([
                     act_name, act_mail, act_mob, 
                     city, state, country, 
-                    dev_user, os_name_ver != 'Select Select'
+                    dev_user, os_name != 'Select', os_version != 'Select'
                 ])
                 email_valid = is_valid_email(act_mail)
                 mobile_valid = is_valid_mobile(act_mob)
