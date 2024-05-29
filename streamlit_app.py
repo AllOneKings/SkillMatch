@@ -264,28 +264,30 @@ def run():
             
             if choice == 'Applicant':
                 # Collecting User Information
-                # Display the summary section by default
-                show_inputs = st.checkbox("Show Inputs")
-                
-                if show_inputs:
-                    # Collecting User Information
+                # Collecting User Information
+                st.subheader("User Information")
+                col1, col2 = st.columns(2)
+                with col1:
                     act_name = st.text_input('Name*')
                     act_mail = st.text_input('Mail*')
                     act_mob  = st.text_input('Mobile Number*')
+                with col2:
                     city = st.text_input('City*')
                     state = st.text_input('State*')
                     country = st.text_input('Country*')
                 
-                    # Generate secure token
-                    sec_token = secrets.token_urlsafe(12)
+                st.subheader("Additional Information")
+                # Generate secure token
+                sec_token = secrets.token_urlsafe(12)
+                # Collecting additional information
+                dev_user = st.text_input('Device User*')
                 
-                    # Collecting additional information
-                    dev_user = st.text_input('Device User*')
+                st.subheader("OS Information")
+                # OS and version selection
+                os_options = ['Select', 'Windows', 'macOS', 'Linux', 'Android', 'iOS']
+                os_name = st.selectbox('OS Name*', os_options)
                 
-                    # OS and version selection
-                    os_options = ['Select', 'Windows', 'macOS', 'Linux', 'Android', 'iOS']
-                    os_name = st.selectbox('OS Name*', os_options)
-                
+                if os_name != 'Select':
                     if os_name == 'Windows':
                         os_version = st.selectbox('OS Version*', ['Select', '7', '8', '10', '11'])
                     elif os_name == 'macOS':
@@ -296,31 +298,33 @@ def run():
                         os_version = st.selectbox('OS Version*', ['Select', '8', '9', '10', '11', '12'])
                     elif os_name == 'iOS':
                         os_version = st.selectbox('OS Version*', ['Select', '14', '15', '16'])
-                    else:
-                        os_version = 'Select'
+                else:
+                    os_version = 'Select'
                 
-                    # Combine OS name and version
-                    os_name_ver = f"{os_name} {os_version}" if os_name != 'Select' and os_version != 'Select' else 'Select'
+                # Combine OS name and version
+                os_name_ver = f"{os_name} {os_version}" if os_name != 'Select' and os_version != 'Select' else 'Select'
                 
-                    # Validate required fields
-                    required_fields_filled = all([
-                        act_name, act_mail, act_mob, 
-                        city, state, country, 
-                        dev_user, os_name_ver != 'Select Select'
-                    ])
-                    email_valid = validate_email(act_mail)
-                    mobile_valid = validate_mobile(act_mob)
+                # Validate required fields
+                required_fields_filled = all([
+                    act_name, act_mail, act_mob, 
+                    city, state, country, 
+                    dev_user, os_name_ver != 'Select Select'
+                ])
+                email_valid = is_valid_email(act_mail)
+                mobile_valid = is_valid_mobile(act_mob)
                 
-                    # Provide feedback on invalid inputs
-                    if required_fields_filled:
-                        if not email_valid:
-                            st.error("Please enter a valid email address.")
-                        if not mobile_valid:
-                            st.warning("Please enter a valid mobile number.")
-                    else:
-                        st.warning("Please fill in all required fields (Name, Mail, Mobile Number, City, State, Country, Device User, OS Name and Version).")
+                # Provide feedback on invalid inputs
+                if required_fields_filled:
+                    if not email_valid:
+                        st.error("Please enter a valid email address.")
+                    if not mobile_valid:
+                        st.warning("Please enter a valid mobile number.")
+                else:
+                    st.warning("Please fill in all required fields (Name, Mail, Mobile Number, City, State, Country, Device User, OS Name and Version).")
                 
-                    # If all required fields are filled and valid, allow resume upload
+                # If all required fields are filled and valid, allow resume upload
+                if required_fields_filled and email_valid and mobile_valid:
+                    st.success("All inputs are valid. You can proceed with resume upload.")
                     if required_fields_filled and email_valid and mobile_valid:
                         st.success("All inputs are valid. You can proceed with resume upload.")
                         # Upload Resume (you can add your resume upload logic here)
