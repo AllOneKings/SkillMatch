@@ -793,20 +793,16 @@ def run():
                         st.balloons()
 
 
-                # query to fetch data from user feedback table
-                query = 'select * from user_feedback'
-                plotfeed_data = pd.read_sql(query, connection)
-
-
-                # fetching feed_score from the query and getting the unique values and total value count
-                labels = plotfeed_data.feed_score.unique()
-                values = plotfeed_data.feed_score.value_counts()
+                # Fetch feedback data from user_feedback(table) and convert it into dataframe
+                cursor.execute('''SELECT * from user_feedback''')
+                feed_data = cursor.fetchall()
+                feed_df = pd.DataFrame(feed_data, columns=['ID', 'Name', 'Email', 'Feedback Score', 'Comments', 'Timestamp'])
 
 
                 # plotting pie chart for user ratings
-                st.subheader("**Past User Rating's**")
-                fig = px.pie(values=values, names=labels, title="Chart of User Rating Score From 1 - 5", color_discrete_sequence=px.colors.sequential.Aggrnyl)
-                st.plotly_chart(fig)
+                st.subheader("User Ratings")
+                fig = px.pie(feed_df, names='Feedback Score', title="Chart of User Rating Score From 1 - 5 🤗")
+                st.plotly_chart(fig, use_container_width=True)
 
 
                 #  Fetching Comment History
