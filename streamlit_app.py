@@ -86,7 +86,7 @@ def geocode_with_retry(latlng, retries=3, delay=1):
     return location
         
 
-def fetch_yt_video_title(link):
+def fetch_yt_video(link):
     try:
         with yt_dlp.YoutubeDL({}) as ydl:
             info = ydl.extract_info(video_url, download=False)
