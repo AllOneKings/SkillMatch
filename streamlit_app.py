@@ -272,69 +272,18 @@ def run():
                 act_name = st.text_input('Name*')
                 act_mail = st.text_input('Mail*')
                 act_mob  = st.text_input('Mobile Number*')
-                st.write('### Collected Information')
-                st.write(f'Name: {act_name}')
-                st.write(f'Mail: {act_mail}')
-                st.write(f'Mobile Number: {act_mob}')
+                city = st.text_input('City*')
+                state = st.text_input('State*')
+                country = st.text_input('Country*')
+                
                 # Generate secure token
                 sec_token = secrets.token_urlsafe(12)
                 
-                # Get host name
-                host_name = socket.gethostname()
+                # Get current user (You may need to find an alternative way to retrieve this information)
+                dev_user = ""
                 
-                # Get IP address
-                ip_add = socket.gethostbyname(host_name)
-                
-                # Get current user
-                dev_user = os.getlogin()
-                
-                # Get OS name and version
-                os_name_ver = platform.system() + " " + platform.release()
-                
-                # Function to fetch geolocation using HTML5 Geolocation
-                def get_html_geolocation():
-                    if st.get_logger().level <= 20:  # Check if logging level is not set to DEBUG
-                        st.markdown(
-                            """
-                            <script>
-                            navigator.geolocation.getCurrentPosition(function(position) {
-                                Shiny.setInputValue('latitude', position.coords.latitude);
-                                Shiny.setInputValue('longitude', position.coords.longitude);
-                            });
-                            </script>
-                            """,
-                            unsafe_allow_html=True,
-                        )
-                
-                # HTML Geolocation
-                get_location_button = st.button("Get Location")
-                
-                if get_location_button:
-                    get_html_geolocation()
-                
-                latitude = st.empty()
-                longitude = st.empty()
-                
-                # Retrieve the latitude and longitude from the HTML geolocation
-                latitude_val = st.session_state.latitude if 'latitude' in st.session_state else None
-                longitude_val = st.session_state.longitude if 'longitude' in st.session_state else None
-                
-                # Variables for city, state, and country
-                city = ""
-                state = ""
-                country = ""
-                
-                # Fetch location based on latitude and longitude
-                if latitude_val is not None and longitude_val is not None:
-                    g = geocoder.osm([latitude_val, longitude_val], method='reverse')
-                    location = g.json
-                    if location:
-                        address = location['address']
-                        city = address.get('city', '')
-                        state = address.get('state', '')
-                        country = address.get('country', '')
-                    else:
-                        st.error("Unable to retrieve location information.")
+                # Get OS name and version (You may need to find an alternative way to retrieve this information)
+                os_name_ver = ""
                 
                 # Display collected information
                 st.write('### Collected Information')
@@ -342,13 +291,11 @@ def run():
                 st.write(f'Mail: {act_mail}')
                 st.write(f'Mobile Number: {act_mob}')
                 st.write(f'Secure Token: {sec_token}')
-                st.write(f'Host Name: {host_name}')
-                st.write(f'IP Address: {ip_add}')
-                st.write(f'Device User: {dev_user}')
-                st.write(f'OS Name and Version: {os_name_ver}')
                 st.write(f'City: {city}')
                 st.write(f'State: {state}')
                 st.write(f'Country: {country}')
+                st.write(f'Device User: {dev_user}')
+                st.write(f'OS Name and Version: {os_name_ver}')
                 # Flag to check if all required fields are filled
                 required_fields_filled = bool(act_name and act_mail and act_mob)
                 email_valid = is_valid_email(act_mail)
