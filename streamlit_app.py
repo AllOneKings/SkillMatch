@@ -273,35 +273,6 @@ def run():
                 act_name = st.text_input('Name*')
                 act_mail = st.text_input('Mail*')
                 act_mob  = st.text_input('Mobile Number*')
-                sec_token = secrets.token_urlsafe(12)
-                host_name = socket.gethostname()
-                ip_add = socket.gethostbyname(host_name)
-                dev_user = os.getlogin()
-                os_name_ver = platform.system() + " " + platform.release()
-
-                # Geocode using IP
-                g = geocoder.ip('me')
-                latlong = g.latlng
-
-                if latlong:
-                    # Geocode with retry
-                    location = geocode_with_retry(latlong)
-
-                    if location:
-                        address = location.raw['address']
-                        city = address.get('city', '')
-                        state = address.get('state', '')
-                        country = address.get('country', '')
-                    else:
-                        st.error("Unable to retrieve location information after several attempts.")
-                        city = ""
-                        state = ""
-                        country = ""
-                else:
-                    st.error("Unable to retrieve IP-based location.")
-                    city = ""
-                    state = ""
-                    country = ""
 
                 # Flag to check if all required fields are filled
                 required_fields_filled = bool(act_name and act_mail and act_mob)
