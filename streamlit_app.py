@@ -308,8 +308,8 @@ def run():
                     city, state, country, 
                     dev_user, os_name_ver != 'Select Select'
                 ])
-                email_valid = validate_email(act_mail)
-                mobile_valid = validate_mobile(act_mob)
+                email_valid = is_valid_email(act_mail)
+                mobile_valid = is_valid_mobile(act_mob)
                 
                 # Provide feedback on invalid inputs
                 if required_fields_filled:
