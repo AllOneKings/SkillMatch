@@ -284,6 +284,7 @@ def run():
                 st.subheader("Additional Information")
                 # Collecting additional information
                 dev_user = st.text_input('Device User* eg. raphaell')
+                sec_token = secrets.token_urlsafe(12)
                 
                 st.subheader("OS Information")
                 # OS and version selection
@@ -316,7 +317,7 @@ def run():
                     st.write(f'City: {city}')
                     st.write(f'State/Province: {state}')
                     st.write(f'Country: {country}')
-                    st.write(f'Secure Token: {secrets.token_urlsafe(12)}')
+                    st.write(f'Secure Token: {sec_token}')
                     st.write(f'Device User: {dev_user}')
                     st.write(f'OS Name and Version: {os_name_ver}')
 
