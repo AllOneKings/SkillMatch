@@ -198,6 +198,17 @@ def run():
             st.sidebar.markdown("# Select User")
             activities = ["Applicant", "Admin", "Feedback", "About"]
             choice = st.sidebar.selectbox("Select among the given options:", activities)
+            # Highlight the Feedback option
+            if choice == "Feedback":
+                st.sidebar.markdown("### **📝 Feedback**", unsafe_allow_html=True)
+            else:
+                st.sidebar.markdown("### Feedback")
+            
+            # Separate button for Feedback
+            st.sidebar.markdown("---")
+            if st.sidebar.button("📝 Give Feedback"):
+                choice = "Feedback"
+
             link = '<b>Built with 🤍 by <a href="https://github.com/allonekings" style="text-decoration: none; color: #008080;">Elisha Rukovo</a></b>'
             st.sidebar.markdown(link, unsafe_allow_html=True)
             st.sidebar.markdown('''
