@@ -34,7 +34,6 @@ import plotly.graph_objects as go
 from geopy.geocoders import Nominatim
 import re
 import logging
-from threading import Thread
 
 
 st.set_page_config(
@@ -59,16 +58,6 @@ X_RapidAPI_Host = os.getenv("X_RapidAPI_Host")
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-# Initialize session state for feedback prompt
-if 'feedback_prompt_shown' not in st.session_state:
-    st.session_state.feedback_prompt_shown = False
-
-# Function to show feedback modal after some time
-def show_feedback_popup():
-    time.sleep(30)  # Delay for 30 seconds
-    st.session_state.feedback_prompt_shown = True
-    st.experimental_rerun()
         
 # Function to validate email format
 def is_valid_email(email):
@@ -208,7 +197,7 @@ def run():
             st.title("SkillMatch Resume Analyzer App")
             st.sidebar.markdown("# Select User")
             activities = ["Applicant", "Admin", "Feedback", "About"]
-            choice = st.session_state.sidebar.selectbox("Select among the given options:", activities)
+            choice = st.sidebar.selectbox("Select among the given options:", activities)
             # Highlight the Feedback option
             if choice == "Feedback":
                 st.sidebar.markdown("### **📝 Feedback**", unsafe_allow_html=True)
