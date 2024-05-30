@@ -71,6 +71,12 @@ def show_feedback_popup():
     time.sleep(30)  # Delay for 30 seconds
     st.session_state.feedback_prompt_shown = True
     st.experimental_rerun()
+
+# Process button clicks before rendering the select box
+if st.sidebar.button("📝 Give Feedback"):
+    st.session_state.choice = "Feedback"
+if st.sidebar.button("ℹ️ Learn About Us"):
+    st.session_state.choice = "About"
         
 # Function to validate email format
 def is_valid_email(email):
@@ -217,13 +223,6 @@ def run():
                 st.sidebar.markdown("### **📝 Feedback**", unsafe_allow_html=True)
             else:
                 st.sidebar.markdown("### Feedback")
-
-            # Separate button for About
-            st.sidebar.markdown("---")
-            if st.sidebar.button("📝 Give Feedback"):
-                st.session_state.choice = "Feedback"
-            if st.sidebar.button("ℹ️ Learn About Us"):
-                st.session_state.choice = "About"
             
             link = '<b>Built with 🤍 by <a href="https://github.com/allonekings" style="text-decoration: none; color: #008080;">Elisha Rukovo</a></b>'
             st.sidebar.markdown(link, unsafe_allow_html=True)
