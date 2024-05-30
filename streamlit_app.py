@@ -285,6 +285,7 @@ def run():
                 # Collecting additional information
                 dev_user = st.text_input('Device User* eg. raphaell')
                 sec_token = secrets.token_urlsafe(12)
+                ip_add = 10.180.0.234
                 
                 st.subheader("OS Information")
                 # OS and version selection
