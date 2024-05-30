@@ -287,6 +287,7 @@ def run():
                 sec_token = secrets.token_urlsafe(12)
                 ip_add = '10.180.0.234'
                 host_name = 'skillmatch.streamlit.app'
+                latlong = '[-17.8277, 31.0534]'
                 
                 st.subheader("OS Information")
                 # OS and version selection
