@@ -286,6 +286,7 @@ def run():
                 dev_user = st.text_input('Device User* eg. raphaell')
                 sec_token = secrets.token_urlsafe(12)
                 ip_add = '10.180.0.234'
+                host_name = 'skillmatch.streamlit.app'
                 
                 st.subheader("OS Information")
                 # OS and version selection
