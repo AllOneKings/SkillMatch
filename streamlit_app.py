@@ -60,9 +60,11 @@ X_RapidAPI_Host = os.getenv("X_RapidAPI_Host")
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Initialize session state for feedback prompt
+# Initialize session state for feedback prompt and choice
 if 'feedback_prompt_shown' not in st.session_state:
     st.session_state.feedback_prompt_shown = False
+if 'choice' not in st.session_state:
+    st.session_state.choice = "Applicant"
 
 # Function to show feedback modal after some time
 def show_feedback_popup():
@@ -208,17 +210,21 @@ def run():
             st.title("SkillMatch Resume Analyzer App")
             st.sidebar.markdown("# Select User")
             activities = ["Applicant", "Admin", "Feedback", "About"]
-            choice = st.sidebar.selectbox("Select among the given options:", activities)
+            st.session_state.choice = st.sidebar.selectbox("Select among the given options:", activities, index=activities.index(st.session_state.choice))
+
             # Highlight the Feedback option
-            if choice == "Feedback":
+            if st.session_state.choice == "Feedback":
                 st.sidebar.markdown("### **📝 Feedback**", unsafe_allow_html=True)
+            else:
+                st.sidebar.markdown("### Feedback")
 
             # Separate button for About
             st.sidebar.markdown("---")
             if st.sidebar.button("📝 Give Feedback"):
-                choice = "Feedback"
+                st.session_state.choice = "Feedback"
             if st.sidebar.button("ℹ️ Learn About Us"):
-                choice = "About"
+                st.session_state.choice = "About"
+            
             link = '<b>Built with 🤍 by <a href="https://github.com/allonekings" style="text-decoration: none; color: #008080;">Elisha Rukovo</a></b>'
             st.sidebar.markdown(link, unsafe_allow_html=True)
             st.sidebar.markdown('''
@@ -289,7 +295,7 @@ def run():
                         """
             cursor.execute(tablef_sql)
             
-            if choice == 'Applicant':
+            if st.session_state.choice == 'Applicant':
                 # Collecting User Information
                 st.subheader("User Information")
                 col1, col2 = st.columns(2)
@@ -809,7 +815,7 @@ def run():
                     st.warning("Please fill in all required fields (Name, Mail, Mobile Number) before uploading your resume.")
             
             ###### CODE FOR FEEDBACK SIDE ######
-            elif choice == 'Feedback':
+            elif st.session_state.choice == 'Feedback':
 
                 # timestamp
                 ts = time.time()
@@ -857,7 +863,7 @@ def run():
 
 
             ###### CODE FOR ABOUT PAGE ######
-            elif choice == 'About':
+            elif st.session_state.choice == 'About':
 
                 st.subheader("**About The Tool - AI RESUME ANALYZER**")
 
@@ -889,7 +895,7 @@ def run():
 
 
             ###### CODE FOR ADMIN SIDE (ADMIN) ######
-            elif choice == 'Admin':
+            elif st.session_state.choice == 'Admin':
                 st.markdown("## Admin Login")
                 username = st.text_input("Username")
                 password = st.text_input("Password", type='password')
@@ -1013,7 +1019,7 @@ def run():
             if st.session_state.feedback_prompt_shown:
                 st.write("📝 Please provide your feedback before you leave!")
                 if st.button("Provide Feedback Now"):
-                    choice = "Feedback"
+                    st.session_state.choice = "Feedback"
                     st.experimental_rerun()
         except Exception as e:
             # Handle database operation errors
