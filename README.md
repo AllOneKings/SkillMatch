@@ -46,10 +46,10 @@ SkillMatch Resume Analayzer App Dissertation project
 ## Screenshots
 
 ## User side
-<img src="https://github.com/AllOneKings/SRAA/blob/main/applicant.jpg">
+<img src="https://github.com/AllOneKings/SkillMatch/blob/main/applicant.jpg">
 
 ## Admin Side
-<img src="https://github.com/AllOneKings/SRAA/blob/main/admin.jpg">
+<img src="https://github.com/AllOneKings/Skillmatch/blob/main/admin.jpg">
 
 ## Just follow me and Star⭐ my repository 
 [![forthebadge](https://forthebadge.com/images/badges/built-with-swag.svg)](https://youtubec0m/@we01beatz)
