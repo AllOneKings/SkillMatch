@@ -1,55 +1,76 @@
-# SRAA
-SkillMatch Resume Analayzer App Dissertation project
+# ⚙️ AI Smart Resume Analyzer (Dissertation)
+![Python](https://img.shields.io/badge/python-3.10-blue)
+![spaCy](https://img.shields.io/badge/spaCy-2.3.9-green)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-blue)](https://www.mysql.com/)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UCyVc1mX0lUpi8wix_XLY80Q?link=https%3A%2F%2Fyoutube.com%2F%40we01beatz%3Fsi%3Dne6dZZyyAvE2Z4mc)
+An intelligent system that uses artificial intelligence and natural language processing techniques to swiftly and accurately assess and evaluate resumes. It automatically extracts pertinent information, assesses qualifications, and delivers insights based on job needs, assisting recruiters and hiring managers.
 
-## For assistance 
-![Static Badge](https://img.shields.io/badge/Email_Me-green?style=social&logo=email&logoColor=rgb&labelColor=hsl&color=rgba&link=https%3A%2F%2Fmail.google.com%2Fmail%2Fu%2F%3Fauthuser%3Dr202812g%40gmail.com)
+## 💁‍♂️ For Assistance
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/elisharukovo)
+[![Email](https://img.shields.io/badge/Email-elisharukovo94%40gmail.com-red?style=flat&logo=gmail&logoColor=white)](mailto:elisharukovo94@gmail.com)
 
-## Versions Used
-![Static Badge](https://img.shields.io/badge/python-3.10-blue?link=https%3A%2F%2Fwww.python.org%2Fdownloads%2Frelease%2Fpython-3100%2F)   
-![Static Badge](https://img.shields.io/badge/spaCy-2.3.9-green)
-
-## Source
-- Extracting user's information from the Resume, I used [PyResparser](https://omkarpathak.in/pyresparser/)
-- Extracting Resume PDF into Text, I used [PDFMiner](https://pypi.org/project/pdfminer/).
-
-## Features
-- User's & Admin Section
+## 🌟 Features
+- User & Admin Section
 - Resume Score
 - Career Recommendations
-- Resume writing Tips suggestions
+- Resume Writing Tips Suggestions
 - Courses Recommendations
 - Skills Recommendations
-- Youtube video recommendations
+- YouTube Video Recommendations
 - Job Listings
 
-## Usage
-- Clone my repository.
-- Open CMD in working directory.
-- Run following command.
-  ```
-  pip install -r requirements.txt
-  ```
-- `streamlit_app.py` is the main Python file of Streamlit Web-Application. 
-- `Courses.py` is the Python file that contains courses and youtube video links.
-- Download XAMP or any other control panel, and turn on the Apache & SQL service.
-- To run app, write following command in CMD. or use any IDE.
-  ```
-  streamlit run streamlit_app.py
-  ```
-- `Uploaded_Resumes` folder is contaning the user's uploaded resumes.
-- `Classifier.py` is the main file which is containing a KNN Algorithm.
-- For more explanation of this project see the tutorial on RaphaellG YouTube channel.
-- Admin side credentials is `raphaellG` and password is `admin@123`. 
+## 🛠️ Technologies Used
+| Frontend       | Model      | Database |
+|----------------|------------|---------|
+| Python + Streamlit | KNN Classifier | MySQL |
 
-## Screenshots
+## 👩‍💻 Source
+- Extracting user information from resumes: [PyResparser](https://omkarpathak.in/pyresparser/)  
+- Extracting resume PDF into text: [PDFMiner](https://pypi.org/project/pdfminer/)
 
-## User side
-<img src="https://github.com/AllOneKings/SkillMatch/blob/main/applicant.jpg">
+## 💻 Screenshots
+| User Side | Admin Side |
+|-----------|------------|
+| ![Home Page](/applicant.jpg) | ![Admin Page](/admin.jpg) |
 
-## Admin Side
-<img src="https://github.com/AllOneKings/Skillmatch/blob/main/admin.jpg">
+## 🚀 Setup Instructions
+1. Clone the repository:
+```bash
+git clone https://github.com/elisharukovo/SkillMatch.git
+```
 
-## Just follow me and Star⭐ my repository 
-[![forthebadge](https://forthebadge.com/images/badges/built-with-swag.svg)](https://youtubec0m/@we01beatz)
+2. Install requirements:
+```bash
+pip install -r requirements.txt
+```
+
+3. Run the Streamlit app:
+```bash
+streamlit run streamlit_app.py
+```
+
+4. Start XAMPP or any other control panel; turn on Apache & MySQL.  
+
+5. Admin credentials:
+```
+username: raphaellG
+password: admin@123
+```
+
+6. `Courses.py` contains courses and YouTube links.  
+7. Uploaded resumes are stored in the `Uploaded_Resumes` folder.  
+
+## 🤝 Contributing
+- Suggest improvements to AI scoring algorithms  
+- Enhance UI/UX  
+- Add new resume parsing features  
+- Improve recommendation system  
+
+## 📅 Roadmap
+- Extend AI models for better recommendations  
+- Integrate LinkedIn scraping  
+- Mobile-friendly interface  
+
+## 📄 License
+MIT License
